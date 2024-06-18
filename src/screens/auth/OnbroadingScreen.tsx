@@ -1,9 +1,11 @@
-import {Image, View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import {Image, View, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import {globalStyles} from '../../styles/globalStyles';
 import Swiper from 'react-native-swiper';
 import {appInfos} from '../../contants/appInfos';
 import {appColor} from '../../contants/appColor';
+import TextComponent from '../../components/TextComponent';
+import {fontFamily} from '../../contants/fontFamily';
 
 const OnbroadingScreen = ({navigation}: any) => {
   const [index, setIndex] = useState(0);
@@ -58,13 +60,21 @@ const OnbroadingScreen = ({navigation}: any) => {
           },
         ]}>
         <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
-          <Text style={[styles.text, {color: appColor.gray}]}>Skip</Text>
+          <TextComponent
+            text="Skip"
+            color={appColor.gray2}
+            font={fontFamily.medium}
+          />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() =>
             index < 2 ? setIndex(index + 1) : navigation.navigate('LoginScreen')
           }>
-          <Text style={styles.text}>Next</Text>
+          <TextComponent
+            text="Next"
+            color={appColor.white}
+            font={fontFamily.medium}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -73,10 +83,10 @@ const OnbroadingScreen = ({navigation}: any) => {
 
 export default OnbroadingScreen;
 
-const styles = StyleSheet.create({
-  text: {
-    color: appColor.white,
-    fontSize: 16,
-    fontWeight: '500',
-  },
-});
+// const styles = StyleSheet.create({
+//   text: {
+//     color: appColor.white,
+//     fontSize: 16,
+//     fontWeight: '500',
+//   },
+// });
