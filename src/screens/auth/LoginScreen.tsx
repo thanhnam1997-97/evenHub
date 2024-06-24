@@ -42,7 +42,6 @@ const LoginScreen = () => {
           value={email}
           placehelder="Email"
           onChange={val => setEmail(val)}
-          // isPassword
           allowClear
           affix={<Sms size={22} color={appColor.gray} />}
         />
