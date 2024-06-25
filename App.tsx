@@ -5,6 +5,7 @@ import {SplashScreen} from './src/screens';
 import {StatusBar} from 'react-native';
 import {useAsyncStorage} from '@react-native-async-storage/async-storage';
 import MainNavigator from './src/navigatiors/MainNavigator';
+import 'react-native-gesture-handler';
 
 const App = () => {
   const [isShowSplash, setIsShowSplash] = useState(true);

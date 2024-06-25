@@ -1,6 +1,5 @@
-import {View, ImageBackground, SafeAreaView} from 'react-native';
+import {View, ImageBackground, SafeAreaView, ScrollView} from 'react-native';
 import React, {ReactNode} from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
 import {globalStyles} from '../styles/globalStyles';
 
 interface Props {

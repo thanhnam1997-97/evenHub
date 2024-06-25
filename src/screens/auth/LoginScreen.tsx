@@ -9,34 +9,25 @@ import {
   SpaceComponent,
   TextComponent,
 } from '../../components';
-import {Image, Switch} from 'react-native';
+import {Image, Switch, StyleSheet} from 'react-native';
 import {Lock, Sms} from 'iconsax-react-native';
 import {appColor} from '../../contants/appColor';
-
+import SocialLogin from './components/SocialLogin';
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRemenber, setIsRemenber] = useState(true);
 
   return (
-    <ContainerComponent isImageBackground>
-      <SectionComponent
-        styles={{
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: 75,
-        }}>
+    <ContainerComponent isImageBackground isScroll>
+      <SectionComponent styles={[styles.container]}>
         <Image
           source={require('../../assets/image/text-logo.png')}
-          style={{
-            width: 164,
-            height: 114,
-            marginBottom: 30,
-          }}
+          style={[styles.imgBackground]}
         />
       </SectionComponent>
       <SectionComponent>
-        <TextComponent size={24} title text="Sign in" flex={0} />
+        <TextComponent size={24} title text="Sign in" />
         <SpaceComponent height={21} />
         <InputComponent
           value={email}
@@ -45,7 +36,6 @@ const LoginScreen = () => {
           allowClear
           affix={<Sms size={22} color={appColor.gray} />}
         />
-
         <InputComponent
           value={password}
           placehelder="Password"
@@ -55,7 +45,7 @@ const LoginScreen = () => {
           affix={<Lock size={22} color={appColor.gray} />}
         />
         <RowComponent justify="space-between">
-          <RowComponent>
+          <RowComponent onPress={() => setIsRemenber(!isRemenber)}>
             <Switch
               trackColor={{true: appColor.primary}}
               thumbColor={appColor.white}
@@ -71,8 +61,32 @@ const LoginScreen = () => {
           />
         </RowComponent>
       </SectionComponent>
+      <SpaceComponent height={16} />
+      <SectionComponent>
+        <ButtonComponent text="SIGN IN" type="primary" />
+      </SectionComponent>
+      <SocialLogin />
+      <SectionComponent>
+        <RowComponent justify="center">
+          <TextComponent text="Don't have an account? " />
+          <ButtonComponent type="link" text="Sign up" />
+        </RowComponent>
+      </SectionComponent>
     </ContainerComponent>
   );
 };
 
 export default LoginScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 75,
+  },
+  imgBackground: {
+    width: 164,
+    height: 114,
+    marginBottom: 30,
+  },
+});
