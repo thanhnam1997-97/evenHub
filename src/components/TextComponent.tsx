@@ -24,7 +24,11 @@ const TextComponent = (props: Props) => {
           color: color ?? appColor.text,
           flex: flex ?? 0,
           fontSize: size ? size : title ? 24 : 14,
-          fontFamily: font ? font : fontFamily.regular,
+          fontFamily: font
+            ? font
+            : title
+            ? fontFamily.medium
+            : fontFamily.regular,
         },
         styles,
       ]}>

@@ -4,7 +4,6 @@ import InputComponent from './InputComponent';
 import RowComponent from './RowComponent';
 import SectionComponent from './SectionComponent';
 import SpaceComponent from './SpaceComponent';
-import TestComponent from './TestComponent';
 import TextComponent from './TextComponent';
 
 export {
@@ -15,5 +14,4 @@ export {
   ContainerComponent,
   SectionComponent,
   RowComponent,
-  TestComponent,
 };

@@ -1,12 +1,12 @@
 import {View, Text} from 'react-native';
 import React from 'react';
 
-const TestComponent = () => {
+const Verication = () => {
   return (
     <View>
-      <Text>TestComponent</Text>
+      <Text>Verication</Text>
     </View>
   );
 };
 
-export default TestComponent;
+export default Verication;
