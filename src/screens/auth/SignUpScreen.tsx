@@ -44,15 +44,20 @@ const SignUpScreen = ({navigation}: any) => {
     const {email, password, confirmPassword} = values;
     const emailValidate = Validate.email(email);
     const passValidate = Validate.Password(password);
+    const comfirmPassValidate = Validate.Password(confirmPassword);
 
     if (email && password && confirmPassword) {
-      if (emailValidate && passValidate) {
+      if (emailValidate && passValidate && comfirmPassValidate) {
         setErrorMessager('');
         setIsLoading(true);
         try {
           const res = await authenticationApi.HandleAuthentication(
             '/register',
-            values,
+            {
+              fullname: values.username,
+              email,
+              password,
+            },
             'post',
           );
           console.log(res);
@@ -62,10 +67,10 @@ const SignUpScreen = ({navigation}: any) => {
           setIsLoading(false);
         }
       } else {
-        setErrorMessager('Emall not correct!!!');
+        setErrorMessager('Email and password are not in correct format!!!');
       }
     } else {
-      setErrorMessager('Vui lòng nhập đẩy đủ thông tin');
+      setErrorMessager('Please enter complete information!!!');
     }
   };
 
