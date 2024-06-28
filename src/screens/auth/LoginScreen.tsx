@@ -9,23 +9,46 @@ import {
   SpaceComponent,
   TextComponent,
 } from '../../components';
-import {Image, Switch, StyleSheet} from 'react-native';
+import {Image, Switch, StyleSheet, Alert} from 'react-native';
 import {Lock, Sms} from 'iconsax-react-native';
 import {appColor} from '../../contants/appColor';
 import SocialLogin from './components/SocialLogin';
 import authenticationApi from '../../apis/authApi';
+import {Validate} from '../../utils/validate';
+import {useDispatch} from 'react-redux';
+import {addAuth} from '../../redux/reducer/authReducer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({navigation}: any) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isRemenber, setIsRemenber] = useState(true);
+  const dispatch = useDispatch();
 
   const handleLogin = async () => {
-    try {
-      const res = await authenticationApi.HandleAuthentication('/hello');
-      console.log(res);
-    } catch (error) {
-      console.log(error);
+    const emailValidate = Validate.email(email);
+
+    if (emailValidate) {
+      try {
+        const res = await authenticationApi.HandleAuthentication(
+          '/login',
+          {
+            email,
+            password,
+          },
+          'post',
+        );
+        dispatch(addAuth(res.data));
+
+        await AsyncStorage.setItem(
+          'auth',
+          isRemenber ? JSON.stringify(res.data) : email,
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      Alert.alert('Email is not correct!!!');
     }
   };
 
