@@ -86,6 +86,7 @@ const LoginScreen = ({navigation}: any) => {
               value={isRemenber}
               onChange={() => setIsRemenber(!isRemenber)}
             />
+            <SpaceComponent width={4} />
             <TextComponent text="Remenber me" />
           </RowComponent>
           <ButtonComponent

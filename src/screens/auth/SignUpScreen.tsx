@@ -18,6 +18,12 @@ import {useDispatch} from 'react-redux';
 import {addAuth} from '../../redux/reducer/authReducer';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+interface ErrorMessage {
+  email: string;
+  password: string;
+  comfirmPassword: string;
+}
+
 const initValue = {
   username: '',
   email: '',
@@ -28,15 +34,9 @@ const initValue = {
 const SignUpScreen = ({navigation}: any) => {
   const [values, setValues] = useState(initValue);
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessager] = useState('');
+  const [errorMessage, setErrorMessager] = useState<any>();
 
   const dispath = useDispatch();
-
-  useEffect(() => {
-    if (values.email || values.password) {
-      setErrorMessager('');
-    }
-  }, [values.email, values.password]);
 
   const handleChangeValue = (key: string, value: string) => {
     const data: any = {...values};
@@ -45,39 +45,74 @@ const SignUpScreen = ({navigation}: any) => {
     setValues(data);
   };
 
-  const handleRegister = async () => {
-    const {email, password, confirmPassword} = values;
-    const emailValidate = Validate.email(email);
-    const passValidate = Validate.Password(password);
-    const comfirmPassValidate = Validate.Password(confirmPassword);
+  const formValidate = (key: string) => {
+    const data = {...errorMessage};
+    let message = ``;
+    switch (key) {
+      case 'username':
+        message = !values.username ? `Full Name is required!!!` : '';
+        break;
 
-    if (email && password && confirmPassword) {
-      if (emailValidate && passValidate && comfirmPassValidate) {
-        setErrorMessager('');
-        setIsLoading(true);
-        try {
-          const res = await authenticationApi.HandleAuthentication(
-            '/register',
-            {
-              fullname: values.username,
-              email,
-              password,
-            },
-            'post',
-          );
-          dispath(addAuth(res.data));
-          await AsyncStorage.setItem('auth', JSON.stringify(res.data));
-          setIsLoading(false);
-        } catch (error) {
-          console.log(error);
-          setIsLoading(false);
+      case 'email':
+        if (!values.email) {
+          message = `Email is required!!!`;
+        } else if (!Validate.email(values.email)) {
+          message = 'Email is not valited!!!';
+        } else {
+          message = '';
         }
-      } else {
-        setErrorMessager('Email and password are not in correct format!!!');
-      }
-    } else {
-      setErrorMessager('Please enter complete information!!!');
+        break;
+
+      case 'password':
+        message = !values.password ? `Password is required!!!` : '';
+        break;
+
+      case 'confirmPassword':
+        if (!values.confirmPassword) {
+          message = `Please type confirm password!`;
+        } else if (values.confirmPassword !== values.password) {
+          message = `Password is not match`;
+        } else {
+          message = '';
+        }
+        break;
     }
+    data[`${key}`] = message;
+    setErrorMessager(data);
+  };
+
+  const handleRegister = async () => {
+    // const {email, password, confirmPassword} = values;
+    // const emailValidate = Validate.email(email);
+    // const passValidate = Validate.Password(password);
+    // const comfirmPassValidate = Validate.Password(confirmPassword);
+    // if (email && password && confirmPassword) {
+    //   if (emailValidate && passValidate && comfirmPassValidate) {
+    //     setErrorMessager('');
+    //     setIsLoading(true);
+    //     try {
+    //       const res = await authenticationApi.HandleAuthentication(
+    //         '/register',
+    //         {
+    //           fullname: values.username,
+    //           email,
+    //           password,
+    //         },
+    //         'post',
+    //       );
+    //       dispath(addAuth(res.data));
+    //       await AsyncStorage.setItem('auth', JSON.stringify(res.data));
+    //       setIsLoading(false);
+    //     } catch (error) {
+    //       console.log(error);
+    //       setIsLoading(false);
+    //     }
+    //   } else {
+    //     setErrorMessager('Email and password are not in correct format!!!');
+    //   }
+    // } else {
+    //   setErrorMessager('Please enter complete information!!!');
+    // }
   };
 
   return (
@@ -92,14 +127,16 @@ const SignUpScreen = ({navigation}: any) => {
             onChange={val => handleChangeValue('username', val)}
             allowClear
             affix={<User size={22} color={appColor.gray} />}
+            onEnd={() => formValidate('username')}
           />
 
           <InputComponent
             value={values.email}
-            placehelder="Email"
+            placehelder="abc@gmail.com"
             onChange={val => handleChangeValue('email', val)}
             allowClear
             affix={<Sms size={22} color={appColor.gray} />}
+            onEnd={() => formValidate('email')}
           />
 
           <InputComponent
@@ -109,6 +146,7 @@ const SignUpScreen = ({navigation}: any) => {
             isPassword
             allowClear
             affix={<Lock size={22} color={appColor.gray} />}
+            onEnd={() => formValidate('password')}
           />
 
           <InputComponent
@@ -118,12 +156,19 @@ const SignUpScreen = ({navigation}: any) => {
             isPassword
             allowClear
             affix={<Lock size={22} color={appColor.gray} />}
+            onEnd={() => formValidate('confirmPassword')}
           />
         </SectionComponent>
 
         {errorMessage && (
           <SectionComponent>
-            <TextComponent text={errorMessage} color={appColor.danger} />
+            {Object.keys(errorMessage).map((error, index) => (
+              <TextComponent
+                text={errorMessage[`${error}`]}
+                key={`error${index}`}
+                color={appColor.danger}
+              />
+            ))}
           </SectionComponent>
         )}
 
